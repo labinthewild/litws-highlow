@@ -20,7 +20,7 @@ window.$.alpaca = require("alpaca");
 window.bootstrap = require("bootstrap");
 window._ = require("lodash");
 
-var introTemplate = require("../templates/introduction.html");
+var introTemplate = require("./pages/introduction.html");
 var irbTemplate = require("../templates/irb.html");
 var demographicsTemplate = require("../templates/demographics.html");
 var instructionsTemplate = require("../templates/instructions.html");
