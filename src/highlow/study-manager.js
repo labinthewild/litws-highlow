@@ -22,6 +22,7 @@ window._ = require("lodash");
 
 var introTemplate = require("./pages/introduction.html");
 var irbTemplate = require("../templates/irb.html");
+var questTemplate = require("./pages/questionnaire.html");
 var demographicsTemplate = require("../templates/demographics.html");
 var instructionsTemplate = require("../templates/instructions.html");
 var loadingTemplate = require("../templates/loading.html");
@@ -50,6 +51,14 @@ module.exports = (function(exports) {
 				type: "display-slide",
 				template: irbTemplate,
 				display_element: $("#irb"),
+				display_next_button: false,
+			},
+			QUESTIONNAIRE_1: {
+				name: "quest1",
+				type: "display-slide",
+				template: questTemplate,
+				template_data: getQuest1Data,
+				display_element: $("#quest1"),
 				display_next_button: false,
 			},
 			DEMOGRAPHICS: {
@@ -87,11 +96,51 @@ module.exports = (function(exports) {
 
 	function configureStudy() {
 		timeline.push(params.slides.INTRODUCTION);
-		timeline.push(params.slides.INFORMED_CONSENT);
-		timeline.push(params.slides.DEMOGRAPHICS);
-		timeline.push(params.slides.COMMENTS);
-		timeline.push(params.slides.RESULTS);
+		timeline.push(params.slides.QUESTIONNAIRE_1);
+		// timeline.push(params.slides.INFORMED_CONSENT);
+		// timeline.push(params.slides.DEMOGRAPHICS);
+		// timeline.push(params.slides.COMMENTS);
+		// timeline.push(params.slides.RESULTS);
 	}
+
+	function getQuest1Data() {
+		return {
+			quest_id: "quest1",
+			questions: [
+				{
+					id:1,
+					text: $.i18n("litw-study-quest1-q1")
+				},
+				{
+					id:2,
+					text: $.i18n("litw-study-quest1-q2")
+				},
+			],
+			responses: [
+				{
+					id:1,
+					text: $.i18n("litw-study-quest1-a1")
+				},
+				{
+					id:2,
+					text: $.i18n("litw-study-quest1-a2")
+				},
+				{
+					id:3,
+					text: $.i18n("litw-study-quest1-a3")
+				},
+				{
+					id:4,
+					text: $.i18n("litw-study-quest1-a4")
+				},
+				{
+					id:5,
+					text: $.i18n("litw-study-quest1-a5")
+				},
+			]
+		}
+	}
+
 
 	function calculateResults() {
 		//TODO: Nothing to calculate

@@ -14,13 +14,13 @@ module.exports = jsPsych.plugins["display-slide"] = (function() {
     var plugin = {};
 
     let getSlideTime = function() {
-		var data_size = jsPsych.data.getData().length;
-		if( data_size > 0 ) {
-			return jsPsych.totalTime() - jsPsych.data.getLastTrialData().time_elapsed;
-		} else {
-			return jsPsych.totalTime();
-		}
-	};
+        var data_size = jsPsych.data.getData().length;
+        if( data_size > 0 ) {
+            return jsPsych.totalTime() - jsPsych.data.getLastTrialData().time_elapsed;
+        } else {
+            return jsPsych.totalTime();
+        }
+    };
 
     plugin.trial = function(display_element, trial) {
         if(trial.setup) trial.setup();
