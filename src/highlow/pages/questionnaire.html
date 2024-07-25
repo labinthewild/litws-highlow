@@ -76,7 +76,7 @@
 
     function finishQuestions () {
         let quest_id = document.getElementById('quest-id').dataset.value;
-        LITW.study.params[quest_id] = JSON.parse(JSON.stringify(responses));
+        LITW.study.params.quest_responses[quest_id] = JSON.parse(JSON.stringify(responses));
         let data = {}
         data[quest_id] = responses
         LITW.data.submitStudyData(data);

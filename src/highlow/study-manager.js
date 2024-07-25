@@ -19,6 +19,7 @@ let Handlebars = require("handlebars");
 window.$.alpaca = require("alpaca");
 window.bootstrap = require("bootstrap");
 window._ = require("lodash");
+require("./js/results");
 
 //LOAD THE HTML FOR STUDY PAGES
 import progressHTML from "./pages/progress.html";
@@ -27,9 +28,8 @@ import introHTML from "./pages/introduction.html";
 import irbHTML from "../templates/irb.html";
 import questHTML from "./pages/questionnaire.html";
 import demographicsHTML from "../templates/demographics.html";
-import instructionsHTML from "../templates/instructions.html";
 import loadingHTML from "../templates/loading.html";
-import resultsHTML from "../templates/results.html";
+import resultsHTML from "./pages/results.html";
 import resultsFooterHTML from "../templates/results-footer.html";
 import commentsHTML from "../templates/comments.html";
 require("../js/litw/jspsych-display-slide");
@@ -38,7 +38,6 @@ let introTemplate = Handlebars.compile(introHTML);
 let irbTemplate = Handlebars.compile(irbHTML);
 let questTemplate = Handlebars.compile(questHTML);
 let demographicsTemplate = Handlebars.compile(demographicsHTML);
-let instructionsTemplate = Handlebars.compile(instructionsHTML);
 let loadingTemplate = Handlebars.compile(loadingHTML);
 let resultsTemplate = Handlebars.compile(resultsHTML);
 let resultsFooterTemplate = Handlebars.compile(resultsFooterHTML);
@@ -50,6 +49,7 @@ module.exports = (function(exports) {
 	var timeline = [],
 	params = {
 		study_id: "TO_BE_ADDED_IF_USING_LITW_INFRA",
+		quest_responses: {},
 		study_recommendation: [],
 		preLoad: ["../img/btn-next.png","../img/btn-next-active.png","../img/ajax-loader.gif"],
 		slides: {
@@ -130,21 +130,21 @@ module.exports = (function(exports) {
 
 	function configureStudy() {
 		// timeline.push(params.slides.INTRODUCTION);
-		params.slides.QUESTIONNAIRE_1.template_data = getQuest1Data();
-		timeline.push(params.slides.QUESTIONNAIRE_1);
-		params.slides.QUESTIONNAIRE_2.template_data =
-			getQuest2Data('quest2', './img/prompt_s.png', 50);
-		timeline.push(params.slides.QUESTIONNAIRE_2);
-		params.slides.QUESTIONNAIRE_3.template_data =
-			getQuest2Data('quest3', './img/prompt_c.png', 75);
-		timeline.push(params.slides.QUESTIONNAIRE_3);
-		params.slides.QUESTIONNAIRE_4.template_data =
-			getQuest2Data('quest4', './img/prompt_cc.png', 100);
-		timeline.push(params.slides.QUESTIONNAIRE_4);
 		// timeline.push(params.slides.INFORMED_CONSENT);
+		// params.slides.QUESTIONNAIRE_1.template_data = getQuest1Data();
+		// timeline.push(params.slides.QUESTIONNAIRE_1);
+		// params.slides.QUESTIONNAIRE_2.template_data =
+		// 	getQuest2Data('quest2', './img/prompt_s.png', 50);
+		// timeline.push(params.slides.QUESTIONNAIRE_2);
+		// params.slides.QUESTIONNAIRE_3.template_data =
+		// 	getQuest2Data('quest3', './img/prompt_c.png', 75);
+		// timeline.push(params.slides.QUESTIONNAIRE_3);
+		// params.slides.QUESTIONNAIRE_4.template_data =
+		// 	getQuest2Data('quest4', './img/prompt_cc.png', 100);
+		// timeline.push(params.slides.QUESTIONNAIRE_4);
 		// timeline.push(params.slides.DEMOGRAPHICS);
 		// timeline.push(params.slides.COMMENTS);
-		// timeline.push(params.slides.RESULTS);
+		timeline.push(params.slides.RESULTS);
 	}
 
 	function getQuest1Data() {
@@ -199,8 +199,22 @@ module.exports = (function(exports) {
 	}
 
 	function calculateResults() {
-		//TODO: Nothing to calculate
-		let results_data = {}
+		//TEST DATA FOR RESULTS PAGE
+		if (Object.keys(params.quest_responses).length == 0) {
+			params.quest_responses = {
+				quest1: { '1': 2, '2': 4 },
+				quest2: { '1': 4, '2': 2, '3': 5 },
+				quest3: { '1': 3, '2': 1, '3': 5 },
+				quest4: { '1': 5, '2': 5, '3': 4 }
+			}
+		}
+		let score = 0;
+		for (let quest of Object.values(params.quest_responses)) {
+			score += Object.values(quest).reduce((acc, score) => acc+score);
+		}
+		let results_data = {
+			score: score
+		}
 		showResults(results_data, true)
 	}
 
