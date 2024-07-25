@@ -71,8 +71,14 @@ module.exports = (function(exports) {
 				name: "quest1",
 				type: "display-slide",
 				template: questTemplate,
-				template_data: getQuest1Data,
 				display_element: $("#quest1"),
+				display_next_button: false,
+			},
+			QUESTIONNAIRE_2: {
+				name: "quest2",
+				type: "display-slide",
+				template: questTemplate,
+				display_element: $("#quest2"),
 				display_next_button: false,
 			},
 			DEMOGRAPHICS: {
@@ -110,7 +116,10 @@ module.exports = (function(exports) {
 
 	function configureStudy() {
 		// timeline.push(params.slides.INTRODUCTION);
-		timeline.push(params.slides.QUESTIONNAIRE_1);
+		params.slides.QUESTIONNAIRE_1.template_data = getQuest1Data();
+		// timeline.push(params.slides.QUESTIONNAIRE_1);
+		params.slides.QUESTIONNAIRE_2.template_data = getQuest2Data('quest2');
+		timeline.push(params.slides.QUESTIONNAIRE_2);
 		// timeline.push(params.slides.INFORMED_CONSENT);
 		// timeline.push(params.slides.DEMOGRAPHICS);
 		// timeline.push(params.slides.COMMENTS);
@@ -119,45 +128,52 @@ module.exports = (function(exports) {
 
 	function getQuest1Data() {
 		return {
+			title: $.i18n("litw-study-quest1-title"),
 			progress: {
 				value: 25
 			},
 			quest_id: "quest1",
-			questions: [
-				{
-					id:1,
-					text: $.i18n("litw-study-quest1-q1")
-				},
-				{
-					id:2,
-					text: $.i18n("litw-study-quest1-q2")
-				},
-			],
-			responses: [
-				{
-					id:1,
-					text: $.i18n("litw-study-quest1-a1")
-				},
-				{
-					id:2,
-					text: $.i18n("litw-study-quest1-a2")
-				},
-				{
-					id:3,
-					text: $.i18n("litw-study-quest1-a3")
-				},
-				{
-					id:4,
-					text: $.i18n("litw-study-quest1-a4")
-				},
-				{
-					id:5,
-					text: $.i18n("litw-study-quest1-a5")
-				},
-			]
+			done_button: $.i18n("litw-study-quest1-save"),
+			questions: [1, 2].map((x)=> {
+				return {
+					id: x,
+					text: $.i18n(`litw-study-quest1-q${x}`)
+				}
+			}),
+			responses: [1, 2, 3, 4, 5].map((x)=> {
+				return {
+					id: x,
+					text: $.i18n(`litw-study-quest1-a${x}`)
+				}
+			})
 		}
 	}
 
+	function getQuest2Data(quest_id) {
+		return {
+			title: $.i18n(`litw-study-${quest_id}-title`),
+			img_prompt: {
+				url: './img/prompt_c.png'
+			},
+			progress: {
+				value: 50
+			},
+			quest_id: quest_id,
+			done_button: $.i18n(`litw-study-${quest_id}-save`),
+			questions: [1, 2, 3].map((q)=> {
+				return {
+					id: q,
+					text: $.i18n(`litw-study-quest2-q${q}`),
+					responses: [1, 2, 3, 4, 5].map((r)=> {
+						return {
+							id: r,
+							text: $.i18n(`litw-study-quest2-q${q}-a${r}`)
+						}
+					})
+				}
+			}),
+		}
+	}
 
 	function calculateResults() {
 		//TODO: Nothing to calculate

@@ -6,27 +6,39 @@
     <div id="quest-id" data-value="{{ quest_id }}"></div>
     <div id="questionnaire">
         <div class="row gap-2">
-            <h3 class="bolded-blue">
-                <span data-i18n="litw-study-quest1-title"></span>
-            </h3>
+            <h3 class="bolded-blue">{{title}}</h3>
         </div>
+
+    {{#if img_prompt}}
+    <div id="img_prompt" class="pb-4">
+        <img src="{{img_prompt.url}}" style="width: 100%; height: auto;">
+    </div>
+    {{/if}}
+
     {{#each questions}}
         <div class="row mt-4">
             <h6 id="question-{{ this.id }}" data-type="question" class="bolded-blue">{{ this.text }}</h6>
             <div class="col d-flex justify-content-center">
                 <div class="btn-group me-2" role="group" aria-label="First group">
-    {{#each ../responses}}
-                    <button type="button" data-qid="{{ ../this.id }}" data-rid="{{ this.id }}" class="btn btn-outline-primary" onclick="respondQuestion({{ ../this.id }}, {{ this.id }})">
-                        {{ this.text }}
-                    </button>
-    {{/each}}
+        {{#if this.responses}}
+            {{#each this.responses}}
+                <button type="button" data-qid="{{ ../this.id }}" data-rid="{{ this.id }}" class="btn btn-outline-primary" onclick="respondQuestion({{ ../this.id }}, {{ this.id }})">
+                    {{ this.text }}
+                </button>
+            {{/each}}
+        {{else}}
+            {{#each ../responses}}
+                <button type="button" data-qid="{{ ../this.id }}" data-rid="{{ this.id }}" class="btn btn-outline-primary" onclick="respondQuestion({{ ../this.id }}, {{ this.id }})">
+                    {{ this.text }}
+                </button>
+            {{/each}}
+        {{/if}}
                 </div>
             </div>
         </div>
     {{/each}}
         <div id="submit" class="row mt-4 invisible">
-            <button id="button-save" type="button" class="btn btn-primary" data-bs-toggle="button"
-                    data-i18n="litw-study-questionnaire-save" onclick="finishQuestions()"></button>
+            <button id="button-save" type="button" class="btn btn-primary" data-bs-toggle="button" onclick="finishQuestions()">{{done_button}}</button>
         </div>
     </div>
 </div>
