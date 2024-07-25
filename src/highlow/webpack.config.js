@@ -1,4 +1,5 @@
-var path = require("path");
+const path = require("path");
+const Handlebars = require("handlebars");
 
 var config = {
   mode: 'development',
@@ -10,9 +11,13 @@ var config = {
   },
   module: {
     rules: [
-        {
-          test: /.*\.html$/, loader: "handlebars-loader"
+      {
+        test: /.*\.html$/, 
+        loader: "html-loader",
+        options: {
+          sources: false,
         }
+      }
     ]
   },
   externals: [

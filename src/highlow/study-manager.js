@@ -15,21 +15,35 @@ window.jQuery = window.$;
 require("../js/jquery.i18n");
 require("../js/jquery.i18n.messagestore");
 require("jquery-ui-bundle");
-require("handlebars");
+let Handlebars = require("handlebars");
 window.$.alpaca = require("alpaca");
 window.bootstrap = require("bootstrap");
 window._ = require("lodash");
 
-var introTemplate = require("./pages/introduction.html");
-var irbTemplate = require("../templates/irb.html");
-var questTemplate = require("./pages/questionnaire.html");
-var demographicsTemplate = require("../templates/demographics.html");
-var instructionsTemplate = require("../templates/instructions.html");
-var loadingTemplate = require("../templates/loading.html");
-var resultsTemplate = require("../templates/results.html");
-var resultsFooter = require("../templates/results-footer.html");
-var commentsTemplate = require("../templates/comments.html");
+//LOAD THE HTML FOR STUDY PAGES
+import progressHTML from "./pages/progress.html";
+Handlebars.registerPartial('prog', Handlebars.compile(progressHTML));
+import introHTML from "./pages/introduction.html";
+import irbHTML from "../templates/irb.html";
+import questHTML from "./pages/questionnaire.html";
+import demographicsHTML from "../templates/demographics.html";
+import instructionsHTML from "../templates/instructions.html";
+import loadingHTML from "../templates/loading.html";
+import resultsHTML from "../templates/results.html";
+import resultsFooterHTML from "../templates/results-footer.html";
+import commentsHTML from "../templates/comments.html";
 require("../js/litw/jspsych-display-slide");
+//CONVERT HTML INTO TEMPLATES
+let introTemplate = Handlebars.compile(introHTML);
+let irbTemplate = Handlebars.compile(irbHTML);
+let questTemplate = Handlebars.compile(questHTML);
+let demographicsTemplate = Handlebars.compile(demographicsHTML);
+let instructionsTemplate = Handlebars.compile(instructionsHTML);
+let loadingTemplate = Handlebars.compile(loadingHTML);
+let resultsTemplate = Handlebars.compile(resultsHTML);
+let resultsFooterTemplate = Handlebars.compile(resultsFooterHTML);
+let commentsTemplate = Handlebars.compile(commentsHTML);
+
 
 //TODO: document "params.study_id" when updating the docs/7-ManageData!!!
 module.exports = (function(exports) {
@@ -95,7 +109,7 @@ module.exports = (function(exports) {
 	};
 
 	function configureStudy() {
-		timeline.push(params.slides.INTRODUCTION);
+		// timeline.push(params.slides.INTRODUCTION);
 		timeline.push(params.slides.QUESTIONNAIRE_1);
 		// timeline.push(params.slides.INFORMED_CONSENT);
 		// timeline.push(params.slides.DEMOGRAPHICS);
@@ -105,6 +119,9 @@ module.exports = (function(exports) {
 
 	function getQuest1Data() {
 		return {
+			progress: {
+				value: 25
+			},
 			quest_id: "quest1",
 			questions: [
 				{
@@ -159,7 +176,7 @@ module.exports = (function(exports) {
 				data: results
 			}));
 		if(showFooter) {
-			$("#results-footer").html(resultsFooter(
+			$("#results-footer").html(resultsFooterTemplate(
 				{
 					share_url: window.location.href,
 					share_title: $.i18n('litw-irb-header'),
