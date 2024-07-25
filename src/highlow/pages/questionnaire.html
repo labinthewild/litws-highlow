@@ -10,9 +10,11 @@
         </div>
 
     {{#if img_prompt}}
-    <div id="img_prompt" class="pb-4">
-        <img src="{{img_prompt.url}}" style="width: 100%; height: auto;">
-    </div>
+        <h4>{{ img_prompt.text_before }}</h4>
+        <div id="img_prompt" class="pb-4">
+            <img src="{{img_prompt.url}}" style="width: 100%; height: auto;">
+        </div>
+        <h4>{{ img_prompt.text_after }}</h4>
     {{/if}}
 
     {{#each questions}}

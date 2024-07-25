@@ -81,6 +81,20 @@ module.exports = (function(exports) {
 				display_element: $("#quest2"),
 				display_next_button: false,
 			},
+			QUESTIONNAIRE_3: {
+				name: "quest3",
+				type: "display-slide",
+				template: questTemplate,
+				display_element: $("#quest3"),
+				display_next_button: false,
+			},
+			QUESTIONNAIRE_4: {
+				name: "quest4",
+				type: "display-slide",
+				template: questTemplate,
+				display_element: $("#quest4"),
+				display_next_button: false,
+			},
 			DEMOGRAPHICS: {
 				type: "display-slide",
 				template: demographicsTemplate,
@@ -117,9 +131,16 @@ module.exports = (function(exports) {
 	function configureStudy() {
 		// timeline.push(params.slides.INTRODUCTION);
 		params.slides.QUESTIONNAIRE_1.template_data = getQuest1Data();
-		// timeline.push(params.slides.QUESTIONNAIRE_1);
-		params.slides.QUESTIONNAIRE_2.template_data = getQuest2Data('quest2');
+		timeline.push(params.slides.QUESTIONNAIRE_1);
+		params.slides.QUESTIONNAIRE_2.template_data =
+			getQuest2Data('quest2', './img/prompt_s.png', 50);
 		timeline.push(params.slides.QUESTIONNAIRE_2);
+		params.slides.QUESTIONNAIRE_3.template_data =
+			getQuest2Data('quest3', './img/prompt_c.png', 75);
+		timeline.push(params.slides.QUESTIONNAIRE_3);
+		params.slides.QUESTIONNAIRE_4.template_data =
+			getQuest2Data('quest4', './img/prompt_cc.png', 100);
+		timeline.push(params.slides.QUESTIONNAIRE_4);
 		// timeline.push(params.slides.INFORMED_CONSENT);
 		// timeline.push(params.slides.DEMOGRAPHICS);
 		// timeline.push(params.slides.COMMENTS);
@@ -149,14 +170,16 @@ module.exports = (function(exports) {
 		}
 	}
 
-	function getQuest2Data(quest_id) {
+	function getQuest2Data(quest_id, img_url, completion) {
 		return {
 			title: $.i18n(`litw-study-${quest_id}-title`),
 			img_prompt: {
-				url: './img/prompt_c.png'
+				url: img_url,
+				text_before: $.i18n(`litw-study-${quest_id}-prompt`),
+				text_after: $.i18n(`litw-study-${quest_id}-subprompt`),
 			},
 			progress: {
-				value: 50
+				value: completion
 			},
 			quest_id: quest_id,
 			done_button: $.i18n(`litw-study-${quest_id}-save`),
