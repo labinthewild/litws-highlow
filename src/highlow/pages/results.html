@@ -37,7 +37,7 @@
         LITW.results.drawMark(participant_score,
             `${$.i18n('study-results-graphic-legend-YOU')} (${participant_score})`, true, 'middle', 5);
         LITW.results.drawMark(usa_score, `${$.i18n('study-results-graphic-legend-USA')} (${usa_score})`, false, 'middle', 2.5);
-        LITW.results.drawMark(chn_score, `${$.i18n('study-results-graphic-legend-CHN')} (${chn_score})`, false, 'middle', 1);
+        LITW.results.drawMark(chn_score, `${$.i18n('study-results-graphic-legend-CHN')} (${chn_score})`, false, 'start', 1);
 
         if (participant_score < 50) {
             document.getElementById("results-header1").textContent =

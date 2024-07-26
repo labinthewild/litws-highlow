@@ -48,7 +48,7 @@ let commentsTemplate = Handlebars.compile(commentsHTML);
 module.exports = (function(exports) {
 	var timeline = [],
 	params = {
-		study_id: "TO_BE_ADDED_IF_USING_LITW_INFRA",
+		study_id: "2ced834d-363c-4049-8afb-9ef62c0306bd",
 		quest_responses: {},
 		study_recommendation: [],
 		preLoad: ["../img/btn-next.png","../img/btn-next-active.png","../img/ajax-loader.gif"],
@@ -129,29 +129,29 @@ module.exports = (function(exports) {
 	};
 
 	function configureStudy() {
-		// timeline.push(params.slides.INTRODUCTION);
+		timeline.push(params.slides.INTRODUCTION);
 		// timeline.push(params.slides.INFORMED_CONSENT);
-		// params.slides.QUESTIONNAIRE_1.template_data = getQuest1Data();
-		// timeline.push(params.slides.QUESTIONNAIRE_1);
-		// params.slides.QUESTIONNAIRE_2.template_data =
-		// 	getQuest2Data('quest2', './img/prompt_s.png', 50);
-		// timeline.push(params.slides.QUESTIONNAIRE_2);
-		// params.slides.QUESTIONNAIRE_3.template_data =
-		// 	getQuest2Data('quest3', './img/prompt_c.png', 75);
-		// timeline.push(params.slides.QUESTIONNAIRE_3);
-		// params.slides.QUESTIONNAIRE_4.template_data =
-		// 	getQuest2Data('quest4', './img/prompt_cc.png', 100);
-		// timeline.push(params.slides.QUESTIONNAIRE_4);
+		params.slides.QUESTIONNAIRE_1.template_data = getQuest1Data(25);
+		timeline.push(params.slides.QUESTIONNAIRE_1);
+		params.slides.QUESTIONNAIRE_2.template_data =
+			getQuest2Data('quest2', './img/prompt_s.png', 50);
+		timeline.push(params.slides.QUESTIONNAIRE_2);
+		params.slides.QUESTIONNAIRE_3.template_data =
+			getQuest2Data('quest3', './img/prompt_c.png', 75);
+		timeline.push(params.slides.QUESTIONNAIRE_3);
+		params.slides.QUESTIONNAIRE_4.template_data =
+			getQuest2Data('quest4', './img/prompt_cc.png', 100);
+		timeline.push(params.slides.QUESTIONNAIRE_4);
 		// timeline.push(params.slides.DEMOGRAPHICS);
 		// timeline.push(params.slides.COMMENTS);
 		timeline.push(params.slides.RESULTS);
 	}
 
-	function getQuest1Data() {
+	function getQuest1Data(completion) {
 		return {
 			title: $.i18n("litw-study-quest1-title"),
 			progress: {
-				value: 25
+				value: completion
 			},
 			quest_id: "quest1",
 			done_button: $.i18n("litw-study-quest1-save"),
