@@ -2,8 +2,8 @@ const path = require("path");
 const Handlebars = require("handlebars");
 
 var config = {
-  mode: 'development',
-  // mode: 'production',
+  // mode: 'development',
+  mode: 'production',
   entry: path.join(__dirname, "study-manager.js"),
   output: {
     path: path.join(__dirname, "js"),

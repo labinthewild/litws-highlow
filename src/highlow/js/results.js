@@ -1,18 +1,20 @@
 (function (exports) {
-    const PAGE_CONTENT_WIDTH = document.getElementById('content').offsetWidth;
     const MAX_GRAPH_WIDTH = 900;
     const MAX_GRAPH_HEIGHT = 400;
     const MAX_SCORE = 100;
-    // Declare the chart dimensions and margins.
-    const height = MAX_GRAPH_HEIGHT;
-    const barHeight = height/10;
-    const MARGIN = barHeight;
-    const width = Math.min(PAGE_CONTENT_WIDTH, MAX_GRAPH_WIDTH)-(2*MARGIN);
+    let width, height, barHeight, margin;
     let svg = null;
     let lastMarkCoordinate = null;
 
+    let setup = function(graphic_width) {
+        height = Math.min(MAX_GRAPH_HEIGHT, graphic_width / 2);
+        barHeight = height / 10;
+        margin = barHeight;
+        width = Math.min(graphic_width, MAX_GRAPH_WIDTH) - (2 * margin);
+    }
+
     let _calculateMarkX = function (score) {
-        return (width/MAX_SCORE*score)+MARGIN;
+        return (width/MAX_SCORE*score)+margin;
     }
     let _addMark = function (context){
         context.moveTo(barHeight/2,barHeight)
@@ -46,7 +48,7 @@
         // Create the SVG container.
         svg = d3.select(`#${divID}`)
             .append("svg")
-            .attr("width", width+(2*MARGIN))
+            .attr("width", width+(2*margin))
             .attr("height", height);
 
         // Add bar
@@ -67,10 +69,11 @@
             .attr('y', barHeight*2)
             .attr('text-anchor', 'end')
             .text($.i18n('study-results-graphic-legend-2'))
-        bar.attr('transform', `translate(${MARGIN}, ${height/2-(barHeight/2)})`);
+        bar.attr('transform', `translate(${margin}, ${height/2-(barHeight/2)})`);
     }
 
     exports.results = {};
+    exports.results.setup = setup;
     exports.results.drawGraphic = draw;
     exports.results.drawMark = drawMark;
 

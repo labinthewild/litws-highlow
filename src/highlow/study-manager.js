@@ -10,6 +10,7 @@
  *************************************************************/
 
 // load webpack modules
+window.LITW = window.LITW || {}
 window.$ = require("jquery");
 window.jQuery = window.$;
 require("../js/jquery.i18n");
@@ -21,33 +22,42 @@ window.bootstrap = require("bootstrap");
 window._ = require("lodash");
 require("./js/results");
 
+import * as litw_engine from "../js/litw/litw.engine.0.1.0";
+LITW.engine = litw_engine;
+
 //LOAD THE HTML FOR STUDY PAGES
-import progressHTML from "./pages/progress.html";
+import progressHTML from "../templates/progress.html";
 Handlebars.registerPartial('prog', Handlebars.compile(progressHTML));
 import introHTML from "./pages/introduction.html";
-import irbHTML from "../templates/irb.html";
+import irbHTML from "../templates/irb2-litw.html";
 import questHTML from "./pages/questionnaire.html";
 import demographicsHTML from "../templates/demographics.html";
-import loadingHTML from "../templates/loading.html";
 import resultsHTML from "./pages/results.html";
 import resultsFooterHTML from "../templates/results-footer.html";
 import commentsHTML from "../templates/comments.html";
-require("../js/litw/jspsych-display-slide");
+
 //CONVERT HTML INTO TEMPLATES
 let introTemplate = Handlebars.compile(introHTML);
 let irbTemplate = Handlebars.compile(irbHTML);
 let questTemplate = Handlebars.compile(questHTML);
 let demographicsTemplate = Handlebars.compile(demographicsHTML);
-let loadingTemplate = Handlebars.compile(loadingHTML);
 let resultsTemplate = Handlebars.compile(resultsHTML);
 let resultsFooterTemplate = Handlebars.compile(resultsFooterHTML);
 let commentsTemplate = Handlebars.compile(commentsHTML);
 
 
-//TODO: document "params.study_id" when updating the docs/7-ManageData!!!
 module.exports = (function(exports) {
-	var timeline = [],
-	params = {
+	const study_times= {
+			SHORT: 5,
+			MEDIUM: 10,
+			LONG: 15,
+		};
+	let timeline = [];
+	let config = {
+		languages: {
+			'default': 'en',
+			'en': './i18n/en.json?v=1.0'
+		},
 		study_id: "2ced834d-363c-4049-8afb-9ef62c0306bd",
 		quest_responses: {},
 		study_recommendation: [],
@@ -55,61 +65,70 @@ module.exports = (function(exports) {
 		slides: {
 			INTRODUCTION: {
 				name: "introduction",
-				type: "display-slide",
+				type: LITW.engine.SLIDE_TYPE.SHOW_SLIDE,
 				template: introTemplate,
-				display_element: $("#intro"),
+				display_element_id: "intro",
 				display_next_button: false,
 			},
 			INFORMED_CONSENT: {
 				name: "informed_consent",
-				type: "display-slide",
+				type: LITW.engine.SLIDE_TYPE.SHOW_SLIDE,
 				template: irbTemplate,
-				display_element: $("#irb"),
+				display_element_id: "irb",
+				template_data: {
+					time: study_times.SHORT,
+				},
 				display_next_button: false,
 			},
 			QUESTIONNAIRE_1: {
 				name: "quest1",
-				type: "display-slide",
+				type: LITW.engine.SLIDE_TYPE.SHOW_SLIDE,
 				template: questTemplate,
-				display_element: $("#quest1"),
+				display_element_id: "quest1",
 				display_next_button: false,
 			},
 			QUESTIONNAIRE_2: {
 				name: "quest2",
-				type: "display-slide",
+				type: LITW.engine.SLIDE_TYPE.SHOW_SLIDE,
 				template: questTemplate,
-				display_element: $("#quest2"),
+				display_element_id: "quest2",
 				display_next_button: false,
 			},
 			QUESTIONNAIRE_3: {
 				name: "quest3",
-				type: "display-slide",
+				type: LITW.engine.SLIDE_TYPE.SHOW_SLIDE,
 				template: questTemplate,
-				display_element: $("#quest3"),
+				display_element_id: "quest3",
 				display_next_button: false,
 			},
 			QUESTIONNAIRE_4: {
 				name: "quest4",
-				type: "display-slide",
+				type: LITW.engine.SLIDE_TYPE.SHOW_SLIDE,
 				template: questTemplate,
-				display_element: $("#quest4"),
+				display_element_id: "quest4",
 				display_next_button: false,
 			},
 			DEMOGRAPHICS: {
-				type: "display-slide",
-				template: demographicsTemplate,
-				display_element: $("#demographics"),
 				name: "demographics",
+				type: LITW.engine.SLIDE_TYPE.SHOW_SLIDE,
+				template: demographicsTemplate,
+				display_element_id: "demographics",
+				display_next_button: false,
+				template_data: {
+					local_data_id: 'LITW_DEMOGRAPHICS'
+				},
 				finish: function(){
-					var dem_data = $('#demographicsForm').alpaca().getValue();
+					let dem_data = $('#demographicsForm').alpaca().getValue();
+					LITW.data.addToLocal(this.template_data.local_data_id, dem_data);
 					LITW.data.submitDemographics(dem_data);
 				}
 			},
 			COMMENTS: {
-				type: "display-slide",
-				template: commentsTemplate,
-				display_element: $("#comments"),
 				name: "comments",
+				type: LITW.engine.SLIDE_TYPE.SHOW_SLIDE,
+				template: commentsTemplate,
+				display_element_id: "comments",
+				display_next_button: true,
 				finish: function(){
 					var comments = $('#commentsForm').alpaca().getValue();
 					if (Object.keys(comments).length > 0) {
@@ -120,31 +139,39 @@ module.exports = (function(exports) {
 				}
 			},
 			RESULTS: {
-				type: "call-function",
-				func: function(){
+				name: "results",
+				type: LITW.engine.SLIDE_TYPE.CALL_FUNCTION,
+				display_next_button: false,
+				call_fn: function(){
 					calculateResults();
 				}
 			}
 		}
 	};
 
-	function configureStudy() {
-		timeline.push(params.slides.INTRODUCTION);
-		// timeline.push(params.slides.INFORMED_CONSENT);
-		params.slides.QUESTIONNAIRE_1.template_data = getQuest1Data(25);
-		timeline.push(params.slides.QUESTIONNAIRE_1);
-		params.slides.QUESTIONNAIRE_2.template_data =
-			getQuest2Data('quest2', './img/prompt_s.png', 50);
-		timeline.push(params.slides.QUESTIONNAIRE_2);
-		params.slides.QUESTIONNAIRE_3.template_data =
-			getQuest2Data('quest3', './img/prompt_c.png', 75);
-		timeline.push(params.slides.QUESTIONNAIRE_3);
-		params.slides.QUESTIONNAIRE_4.template_data =
-			getQuest2Data('quest4', './img/prompt_cc.png', 100);
-		timeline.push(params.slides.QUESTIONNAIRE_4);
-		// timeline.push(params.slides.DEMOGRAPHICS);
-		// timeline.push(params.slides.COMMENTS);
-		timeline.push(params.slides.RESULTS);
+	function configureTimeline() {
+		timeline.push(config.slides.INTRODUCTION);
+		timeline.push(config.slides.INFORMED_CONSENT);
+		config.slides.QUESTIONNAIRE_1.template_data = () => {
+			return getQuest1Data(25);
+		}
+		timeline.push(config.slides.QUESTIONNAIRE_1);
+		config.slides.QUESTIONNAIRE_2.template_data = () => {
+			return getQuest2Data('quest2', './img/prompt_s.png', 50);
+		}
+		timeline.push(config.slides.QUESTIONNAIRE_2);
+		config.slides.QUESTIONNAIRE_3.template_data = () => {
+			return getQuest2Data('quest3', './img/prompt_c.png', 75, false);
+		}
+		timeline.push(config.slides.QUESTIONNAIRE_3);
+		config.slides.QUESTIONNAIRE_4.template_data = () => {
+			return getQuest2Data('quest4', './img/prompt_cc.png', 100, false);
+		}
+		timeline.push(config.slides.QUESTIONNAIRE_4);
+		timeline.push(config.slides.DEMOGRAPHICS);
+		timeline.push(config.slides.COMMENTS);
+		timeline.push(config.slides.RESULTS);
+		return timeline;
 	}
 
 	function getQuest1Data(completion) {
@@ -170,9 +197,8 @@ module.exports = (function(exports) {
 		}
 	}
 
-	function getQuest2Data(quest_id, img_url, completion) {
-		return {
-			title: $.i18n(`litw-study-${quest_id}-title`),
+	function getQuest2Data(quest_id, img_url, completion, title=true) {
+		let data =  {
 			img_prompt: {
 				url: img_url,
 				text_before: $.i18n(`litw-study-${quest_id}-prompt`),
@@ -196,12 +222,16 @@ module.exports = (function(exports) {
 				}
 			}),
 		}
+		if (title) {
+			data.title = $.i18n(`litw-study-${quest_id}-title`);
+		}
+		return data;
 	}
 
 	function calculateResults() {
 		//TEST DATA FOR RESULTS PAGE
-		if (Object.keys(params.quest_responses).length == 0) {
-			params.quest_responses = {
+		if (Object.keys(config.quest_responses).length === 0) {
+			config.quest_responses = {
 				quest1: { '1': 2, '2': 4 },
 				quest2: { '1': 4, '2': 2, '3': 5 },
 				quest3: { '1': 3, '2': 1, '3': 5 },
@@ -209,7 +239,7 @@ module.exports = (function(exports) {
 			}
 		}
 		let score = 0;
-		for (let quest of Object.values(params.quest_responses)) {
+		for (let quest of Object.values(config.quest_responses)) {
 			score += Object.values(quest).reduce((acc, score) => acc+score);
 		}
 		let results_data = {
@@ -219,12 +249,15 @@ module.exports = (function(exports) {
 	}
 
 	function showResults(results = {}, showFooter = false) {
-		if('PID' in params.URL) {
+		let results_div = $("#results");
+		let recom_studies = [];
+		LITW.engage.getStudiesRecommendation(config.study_id, (studies) => {recom_studies = studies});
+		if('PID' in LITW.data.getURLparams) {
 			//REASON: Default behavior for returning a unique PID when collecting data from other platforms
 			results.code = LITW.data.getParticipantId();
 		}
 
-		$("#results").html(
+		results_div.html(
 			resultsTemplate({
 				data: results
 			}));
@@ -234,94 +267,32 @@ module.exports = (function(exports) {
 					share_url: window.location.href,
 					share_title: $.i18n('litw-irb-header'),
 					share_text: $.i18n('litw-template-title'),
-					more_litw_studies: params.study_recommendation
+					more_litw_studies: recom_studies
 				}
 			));
 		}
-		$("#results").i18n();
+		results_div.i18n();
 		LITW.utils.showSlide("results");
 	}
 
-	function readSummaryData() {
-		$.getJSON( "summary.json", function( data ) {
-			//TODO: 'data' contains the produced summary form DB data
-			//      in case the study was loaded using 'index.php'
-			//SAMPLE: The example code gets the cities of study partcipants.
-			console.log(data);
-		});
-	}
-
-	function startStudy() {
-		// generate unique participant id and geolocate participant
-		LITW.data.initialize();
-		// save URL params
-		params.URL = LITW.utils.getParamsURL();
-		if( Object.keys(params.URL).length > 0 ) {
-			LITW.data.submitData(params.URL,'litw:paramsURL');
-		}
-		// populate study recommendation
-		LITW.engage.getStudiesRecommendation(2, (studies_list) => {
-			params.study_recommendation = studies_list;
-		});
-		// initiate pages timeline
-		jsPsych.init({
-		  timeline: timeline
-		});
-	}
-
-	function startExperiment(){
-		//TODO These methods should be something like act1().then.act2().then...
-		//... it is close enough to that... maybe the translation need to be encapsulated next.
-		// get initial data from database (maybe needed for the results page!?)
-		//readSummaryData();
-
-		// determine and set the study language
-		$.i18n().locale = LITW.locale.getLocale();
-		var languages = {
-			'en': './i18n/en.json?v=1.0',
-			'pt': './i18n/pt-br.json?v=1.0',
-		};
-		//TODO needs to be a little smarter than this when serving specific language versions, like pt-BR!
-		var language = LITW.locale.getLocale().substring(0,2);
-		var toLoad = {};
-		if(language in languages) {
-			toLoad[language] = languages[language];
+	function bootstrap() {
+		let good_config = LITW.engine.configure_study(config.preLoad, config.languages,
+			configureTimeline(), config.study_id);
+		if (good_config){
+			LITW.engine.start_study();
 		} else {
-			toLoad['en'] = languages['en'];
+			console.error("Study configuration error!");
+			//TODO fail nicely, maybe a page with useful info to send to the tech team?
 		}
-		$.i18n().load(toLoad).done(
-			function() {
-				$('head').i18n();
-				$('body').i18n();
-
-				LITW.utils.showSlide("img-loading");
-				//start the study when resources are preloaded
-				jsPsych.pluginAPI.preloadImages(params.preLoad,
-					function () {
-						configureStudy();
-						startStudy();
-					},
-
-					// update loading indicator
-					function (numLoaded) {
-						$("#img-loading").html(loadingTemplate({
-							msg: $.i18n("litw-template-loading"),
-							numLoaded: numLoaded,
-							total: params.preLoad.length
-						}));
-					}
-				);
-			});
 	}
-
 
 
 	// when the page is loaded, start the study!
 	$(document).ready(function() {
-		startExperiment();
+		bootstrap();
 	});
 	exports.study = {};
-	exports.study.params = params
+	exports.study.params = config
 
 })( window.LITW = window.LITW || {} );
 
