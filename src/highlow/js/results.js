@@ -24,14 +24,13 @@
         return context
     }
 
-    let drawMark = function(score, legend, fill= false, text_anchor='middle', hight=1) {
+    let drawMark = function(score, legend, stroke="black", fill= false, text_anchor='middle', hight=1) {
         let mark_x = _calculateMarkX(score);
         let mark_y = height/2-(3/2*barHeight);
-
         let mark = svg.append("g");
-        let fill_color = !fill ? "none" : "black";
+        let fill_color = !fill ? "none" : "darkOrange";
         mark.append("path")
-            .style("stroke", "black")
+            .style("stroke", stroke)
             .style("fill", fill_color)
             .attr('d', _addMark(d3.path()))
         mark.append("text")
@@ -39,6 +38,7 @@
             .attr('y', -barHeight/2*hight)
             .attr('text-anchor', text_anchor)
             .attr('font-size', '1.5em')
+            .style("fill", stroke)
             .text(legend)
 
         lastMarkCoordinate = {x: mark_x, y: mark_y};
