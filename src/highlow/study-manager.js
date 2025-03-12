@@ -265,63 +265,63 @@ module.exports = (function(exports) {
 		timeline.push(config.slides.INTRODUCTION);
 		timeline.push(config.slides.INFORMED_CONSENT);
 		config.slides.QUESTIONNAIRE_1.template_data = () => {
-			return getHCLCData('quest1', 15);
+			return getHCLCData('quest1', 8);
 		}
 		timeline.push(config.slides.QUESTIONNAIRE_1);
 		config.slides.QUESTIONNAIRE_2.template_data = () => {
-			return getHCLCData('quest2', 30);
+			return getHCLCData('quest2', 16);
 		}
 		timeline.push(config.slides.QUESTIONNAIRE_2);
 		config.slides.QUESTIONNAIRE_3.template_data = () => {
-			return getHCLCData('quest3', 50);
+			return getHCLCData('quest3', 24);
 		}
 		timeline.push(config.slides.QUESTIONNAIRE_3);
 		config.slides.QUESTIONNAIRE_4.template_data = () => {
-			return getHCLCData('quest4', 67);
+			return getHCLCData('quest4', 26);
 		}
 		timeline.push(config.slides.QUESTIONNAIRE_4);
 		timeline.push(config.slides.SCENARIO_1);
 		config.slides.QUESTIONNAIRE_5.template_data = () => {
-			return getMSGData('quest5', './img/set1-1.png', 70);
+			return getMSGData('quest5', './img/set1-1.png', 32);
 		}
 		timeline.push(config.slides.QUESTIONNAIRE_5);
 		config.slides.QUESTIONNAIRE_6.template_data = () => {
-			return getMSGData('quest6', './img/set1-2.png', 73, false);
+			return getMSGData('quest6', './img/set1-2.png', 40);
 		}
 		timeline.push(config.slides.QUESTIONNAIRE_6);
 		timeline.push(config.slides.SCENARIO_2);
 		config.slides.QUESTIONNAIRE_7.template_data = () => {
-			return getMSGData('quest7', './img/set2-1.png', 76, false);
+			return getMSGData('quest7', './img/set2-1.png', 48);
 		}
 		timeline.push(config.slides.QUESTIONNAIRE_7);
 		config.slides.QUESTIONNAIRE_8.template_data = () => {
-			return getMSGData('quest8', './img/set2-2.png', 79, false);
+			return getMSGData('quest8', './img/set2-2.png', 56);
 		}
 		timeline.push(config.slides.QUESTIONNAIRE_8);
 		config.slides.QUESTIONNAIRE_9.template_data = () => {
-			return getMSGData('quest9', './img/set2-3.png', 82, false);
+			return getMSGData('quest9', './img/set2-3.png', 64);
 		}
 		timeline.push(config.slides.QUESTIONNAIRE_9);
 		timeline.push(config.slides.SCENARIO_3);
 		config.slides.QUESTIONNAIRE_10.template_data = () => {
-			return getMSGData('quest10', './img/set3-1.png', 85, false);
+			return getMSGData('quest10', './img/set3-1.png', 72);
 		}
 		timeline.push(config.slides.QUESTIONNAIRE_10);
 		config.slides.QUESTIONNAIRE_11.template_data = () => {
-			return getMSGData('quest11', './img/set3-2.png', 88, false);
+			return getMSGData('quest11', './img/set3-2.png', 80);
 		}
 		timeline.push(config.slides.QUESTIONNAIRE_11);
 		timeline.push(config.slides.SCENARIO_4);
 		config.slides.QUESTIONNAIRE_12.template_data = () => {
-			return getMSGData('quest12', './img/set4-1.png', 91, false);
+			return getMSGData('quest12', './img/set4-1.png', 88);
 		}
 		timeline.push(config.slides.QUESTIONNAIRE_12);
 		config.slides.QUESTIONNAIRE_13.template_data = () => {
-			return getMSGData('quest13', './img/set4-2.png', 94, false);
+			return getMSGData('quest13', './img/set4-2.png', 92);
 		}
 		timeline.push(config.slides.QUESTIONNAIRE_13);
 		config.slides.QUESTIONNAIRE_14.template_data = () => {
-			return getMSGData('quest14', './img/set4-3.png', 97, false);
+			return getMSGData('quest14', './img/set4-3.png', 100);
 		}
 		timeline.push(config.slides.QUESTIONNAIRE_14);
 		timeline.push(config.slides.DEMOGRAPHICS);
@@ -399,8 +399,12 @@ module.exports = (function(exports) {
 				quest4: { '1': 1, '2': 2, '3': 3, '4': 4, '5': 5}
 			}
 		}
+		// only pick questions 1-4 for hclc score
+		const pick = (obj, keys) => Object.keys(obj).filter(k => keys.includes(k)).reduce((res, k) => Object.assign(res, {[k]: obj[k]}), {});
+		let hclc_responses = pick(config.quest_responses, ["quest1", "quest2", "quest3", "quest4"])
 		let score = 0;
-		for (let quest of Object.values(config.quest_responses)) {
+		for (let quest of Object.values(hclc_responses)) {
+			// console.log("quest ", quest)
 			score += Object.values(quest).reduce((acc, score) => acc+score);
 		}
 		let results_data = {
