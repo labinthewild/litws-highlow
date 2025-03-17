@@ -32,6 +32,7 @@ import introHTML from "./pages/introduction.html";
 import irbHTML from "../templates/irb2-litw.html";
 import questHTML from "./pages/questionnaire.html";
 import demographicsHTML from "../templates/demographics.html";
+import scenarioHTML from "./pages/scenario.html"
 import resultsHTML from "./pages/results.html";
 import resultsFooterHTML from "../templates/results-footer.html";
 import commentsHTML from "../templates/comments.html";
@@ -41,6 +42,7 @@ let introTemplate = Handlebars.compile(introHTML);
 let irbTemplate = Handlebars.compile(irbHTML);
 let questTemplate = Handlebars.compile(questHTML);
 let demographicsTemplate = Handlebars.compile(demographicsHTML);
+let scenarioTemplate = Handlebars.compile(scenarioHTML);
 let resultsTemplate = Handlebars.compile(resultsHTML);
 let resultsFooterTemplate = Handlebars.compile(resultsFooterHTML);
 let commentsTemplate = Handlebars.compile(commentsHTML);
@@ -108,6 +110,116 @@ module.exports = (function(exports) {
 				display_element_id: "quest4",
 				display_next_button: false,
 			},
+			SCENARIO_1: {
+				name: "scenario1",
+				type: LITW.engine.SLIDE_TYPE.SHOW_SLIDE,
+				template: scenarioTemplate,
+				display_element_id: "scenario1",
+				template_data: {
+					id: "1",
+				},
+				display_next_button: true,
+			},
+			QUESTIONNAIRE_5: {
+				name: "quest5",
+				type: LITW.engine.SLIDE_TYPE.SHOW_SLIDE,
+				template: questTemplate,
+				display_element_id: "quest5",
+				display_next_button: false,
+			},
+			QUESTIONNAIRE_6: {
+				name: "quest6",
+				type: LITW.engine.SLIDE_TYPE.SHOW_SLIDE,
+				template: questTemplate,
+				display_element_id: "quest6",
+				display_next_button: false,
+			},
+			SCENARIO_2: {
+				name: "scenario2",
+				type: LITW.engine.SLIDE_TYPE.SHOW_SLIDE,
+				template: scenarioTemplate,
+				display_element_id: "scenario2",
+				template_data: {
+					id: "2",
+				},
+				display_next_button: true,
+			},
+			QUESTIONNAIRE_7: {
+				name: "quest7",
+				type: LITW.engine.SLIDE_TYPE.SHOW_SLIDE,
+				template: questTemplate,
+				display_element_id: "quest7",
+				display_next_button: false,
+			},
+			QUESTIONNAIRE_8: {
+				name: "quest8",
+				type: LITW.engine.SLIDE_TYPE.SHOW_SLIDE,
+				template: questTemplate,
+				display_element_id: "quest8",
+				display_next_button: false,
+			},
+			QUESTIONNAIRE_9: {
+				name: "quest9",
+				type: LITW.engine.SLIDE_TYPE.SHOW_SLIDE,
+				template: questTemplate,
+				display_element_id: "quest9",
+				display_next_button: false,
+			},
+			SCENARIO_3: {
+				name: "scenario3",
+				type: LITW.engine.SLIDE_TYPE.SHOW_SLIDE,
+				template: scenarioTemplate,
+				display_element_id: "scenario3",
+				template_data: {
+					id: "3",
+				},
+				display_next_button: true,
+			},
+			QUESTIONNAIRE_10: {
+				name: "quest10",
+				type: LITW.engine.SLIDE_TYPE.SHOW_SLIDE,
+				template: questTemplate,
+				display_element_id: "quest10",
+				display_next_button: false,
+			},
+			QUESTIONNAIRE_11: {
+				name: "quest11",
+				type: LITW.engine.SLIDE_TYPE.SHOW_SLIDE,
+				template: questTemplate,
+				display_element_id: "quest11",
+				display_next_button: false,
+			},
+			SCENARIO_4: {
+				name: "scenario4",
+				type: LITW.engine.SLIDE_TYPE.SHOW_SLIDE,
+				template: scenarioTemplate,
+				display_element_id: "scenario4",
+				template_data: {
+					id: "4",
+				},
+				display_next_button: true,
+			},
+			QUESTIONNAIRE_12: {
+				name: "quest12",
+				type: LITW.engine.SLIDE_TYPE.SHOW_SLIDE,
+				template: questTemplate,
+				display_element_id: "quest12",
+				display_next_button: false,
+			},
+			QUESTIONNAIRE_13: {
+				name: "quest13",
+				type: LITW.engine.SLIDE_TYPE.SHOW_SLIDE,
+				template: questTemplate,
+				display_element_id: "quest13",
+				display_next_button: false,
+			},
+			QUESTIONNAIRE_14: {
+				name: "quest14",
+				type: LITW.engine.SLIDE_TYPE.SHOW_SLIDE,
+				template: questTemplate,
+				display_element_id: "quest14",
+				display_next_button: false,
+			},
 			DEMOGRAPHICS: {
 				name: "demographics",
 				type: LITW.engine.SLIDE_TYPE.SHOW_SLIDE,
@@ -153,39 +265,88 @@ module.exports = (function(exports) {
 		timeline.push(config.slides.INTRODUCTION);
 		timeline.push(config.slides.INFORMED_CONSENT);
 		config.slides.QUESTIONNAIRE_1.template_data = () => {
-			return getQuest1Data(25);
+			return getHCLCData('quest1', 8);
 		}
 		timeline.push(config.slides.QUESTIONNAIRE_1);
 		config.slides.QUESTIONNAIRE_2.template_data = () => {
-			return getQuest2Data('quest2', './img/prompt_s.png', 50);
+			return getHCLCData('quest2', 16);
 		}
 		timeline.push(config.slides.QUESTIONNAIRE_2);
 		config.slides.QUESTIONNAIRE_3.template_data = () => {
-			return getQuest2Data('quest3', './img/prompt_c.png', 75, false);
+			return getHCLCData('quest3', 24);
 		}
 		timeline.push(config.slides.QUESTIONNAIRE_3);
 		config.slides.QUESTIONNAIRE_4.template_data = () => {
-			return getQuest2Data('quest4', './img/prompt_cc.png', 100, false);
+			return getHCLCData('quest4', 26);
 		}
 		timeline.push(config.slides.QUESTIONNAIRE_4);
+		timeline.push(config.slides.SCENARIO_1);
+		config.slides.QUESTIONNAIRE_5.template_data = () => {
+			return getMSGData('quest5', './img/set1-1.png', 32);
+		}
+		timeline.push(config.slides.QUESTIONNAIRE_5);
+		config.slides.QUESTIONNAIRE_6.template_data = () => {
+			return getMSGData('quest6', './img/set1-2.png', 40);
+		}
+		timeline.push(config.slides.QUESTIONNAIRE_6);
+		timeline.push(config.slides.SCENARIO_2);
+		config.slides.QUESTIONNAIRE_7.template_data = () => {
+			return getMSGData('quest7', './img/set2-1.png', 48);
+		}
+		timeline.push(config.slides.QUESTIONNAIRE_7);
+		config.slides.QUESTIONNAIRE_8.template_data = () => {
+			return getMSGData('quest8', './img/set2-2.png', 56);
+		}
+		timeline.push(config.slides.QUESTIONNAIRE_8);
+		config.slides.QUESTIONNAIRE_9.template_data = () => {
+			return getMSGData('quest9', './img/set2-3.png', 64);
+		}
+		timeline.push(config.slides.QUESTIONNAIRE_9);
+		timeline.push(config.slides.SCENARIO_3);
+		config.slides.QUESTIONNAIRE_10.template_data = () => {
+			return getMSGData('quest10', './img/set3-1.png', 72);
+		}
+		timeline.push(config.slides.QUESTIONNAIRE_10);
+		config.slides.QUESTIONNAIRE_11.template_data = () => {
+			return getMSGData('quest11', './img/set3-2.png', 80);
+		}
+		timeline.push(config.slides.QUESTIONNAIRE_11);
+		timeline.push(config.slides.SCENARIO_4);
+		config.slides.QUESTIONNAIRE_12.template_data = () => {
+			return getMSGData('quest12', './img/set4-1.png', 88);
+		}
+		timeline.push(config.slides.QUESTIONNAIRE_12);
+		config.slides.QUESTIONNAIRE_13.template_data = () => {
+			return getMSGData('quest13', './img/set4-2.png', 92);
+		}
+		timeline.push(config.slides.QUESTIONNAIRE_13);
+		config.slides.QUESTIONNAIRE_14.template_data = () => {
+			return getMSGData('quest14', './img/set4-3.png', 100);
+		}
+		timeline.push(config.slides.QUESTIONNAIRE_14);
 		timeline.push(config.slides.DEMOGRAPHICS);
 		timeline.push(config.slides.COMMENTS);
 		timeline.push(config.slides.RESULTS);
 		return timeline;
 	}
 
-	function getQuest1Data(completion) {
+	function getHCLCData(quest_id, completion) {
+		// last set of questions richardon's survey is 2 questions
+		let num_questions = [1, 2, 3, 4, 5];
+		if (quest_id == "quest4") {
+			num_questions = [1, 2];
+		}
 		return {
 			title: $.i18n("litw-study-quest1-title"),
 			progress: {
 				value: completion
 			},
-			quest_id: "quest1",
+			quest_id: quest_id,
 			done_button: $.i18n("litw-study-quest1-save"),
-			questions: [1, 2].map((x)=> {
+			questions: num_questions.map((x)=> {
 				return {
 					id: x,
-					text: $.i18n(`litw-study-quest1-q${x}`)
+					text: $.i18n(`litw-study-${quest_id}-q${x}`)
 				}
 			}),
 			responses: [1, 2, 3, 4, 5].map((x)=> {
@@ -197,7 +358,7 @@ module.exports = (function(exports) {
 		}
 	}
 
-	function getQuest2Data(quest_id, img_url, completion, title=true) {
+	function getMSGData(quest_id, img_url, completion, title=true) {
 		let data =  {
 			img_prompt: {
 				url: img_url,
@@ -209,14 +370,14 @@ module.exports = (function(exports) {
 			},
 			quest_id: quest_id,
 			done_button: $.i18n(`litw-study-${quest_id}-save`),
-			questions: [1, 2, 3].map((q)=> {
+			questions: [1, 2, 3, 4].map((q)=> {
 				return {
 					id: q,
-					text: $.i18n(`litw-study-quest2-q${q}`),
+					text: $.i18n(`litw-study-quest5-q${q}`),
 					responses: [1, 2, 3, 4, 5].map((r)=> {
 						return {
 							id: r,
-							text: $.i18n(`litw-study-quest2-q${q}-a${r}`)
+							text: $.i18n(`litw-study-quest5-q${q}-a${r}`)
 						}
 					})
 				}
@@ -232,14 +393,18 @@ module.exports = (function(exports) {
 		//TEST DATA FOR RESULTS PAGE
 		if (Object.keys(config.quest_responses).length === 0) {
 			config.quest_responses = {
-				quest1: { '1': 2, '2': 4 },
-				quest2: { '1': 4, '2': 2, '3': 5 },
-				quest3: { '1': 3, '2': 1, '3': 5 },
-				quest4: { '1': 5, '2': 5, '3': 4 }
+				quest1: { '1': 1, '2': 2, '3': 3, '4': 4, '5': 5},
+				quest2: { '1': 1, '2': 2, '3': 3, '4': 4, '5': 5},
+				quest3: { '1': 1, '2': 2, '3': 3, '4': 4, '5': 5},
+				quest4: { '1': 1, '2': 2, '3': 3, '4': 4, '5': 5}
 			}
 		}
+		// only pick questions 1-4 for hclc score
+		const pick = (obj, keys) => Object.keys(obj).filter(k => keys.includes(k)).reduce((res, k) => Object.assign(res, {[k]: obj[k]}), {});
+		let hclc_responses = pick(config.quest_responses, ["quest1", "quest2", "quest3", "quest4"])
 		let score = 0;
-		for (let quest of Object.values(config.quest_responses)) {
+		for (let quest of Object.values(hclc_responses)) {
+			// console.log("quest ", quest)
 			score += Object.values(quest).reduce((acc, score) => acc+score);
 		}
 		let results_data = {
