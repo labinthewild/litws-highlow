@@ -72,6 +72,10 @@
   "litw-demographics-race-native": "American Indian or Alaska Native",
   "litw-demographics-race-white": "White",
   "litw-demographics-religion": "What religion or religious denomination do you belong to?",
+  "litw-study-intervention-message-UNIQUE": "Your responses in this study are unique to you. The patterns in your data reflect your own individual communication style, influenced by your culture, upbringing, and experiences. As you complete this test, you'll be contributing a unique data point that only you can provide from your demographic.",
+  "litw-study-intervention-message-RESEARCH": "Your responses in this study are unique to you. The patterns in your data reflect your own individual communication style, influenced by your culture, upbringing, and experiences. Researchers use data like yours to study how people from different backgrounds around the world interpret online communication, and your specific responses help us better understand how to design technology for diverse audiences.",
+  "litw-study-intervention-message-NEUTRAL": "This test consists of a series of questions about communication styles, and it should take a few minutes to complete. Once you finish, you will receive your results and see how they compare to people around the world.",
+
   "litw-study-quest1-title": "Let’s start with some questions! How much do you agree with the following questions?",
   "litw-study-quest1-q1": "Listeners should be able to understand what a speaker is trying to express, even when the speaker does not say everything they intend to communicate.",
   "litw-study-quest1-q2": "Speakers should not expect listeners will figure out what they really mean unless the intended message is stated precisely.",

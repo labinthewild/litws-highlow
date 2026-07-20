@@ -36,6 +36,7 @@ import scenarioHTML from "./pages/scenario.html"
 import resultsHTML from "./pages/results.html";
 import resultsFooterHTML from "../templates/results-footer.html";
 import commentsHTML from "../templates/comments.html";
+import interventionHTML from "./pages/intervention.html";
 
 //CONVERT HTML INTO TEMPLATES
 let introTemplate = Handlebars.compile(introHTML);
@@ -46,6 +47,7 @@ let scenarioTemplate = Handlebars.compile(scenarioHTML);
 let resultsTemplate = Handlebars.compile(resultsHTML);
 let resultsFooterTemplate = Handlebars.compile(resultsFooterHTML);
 let commentsTemplate = Handlebars.compile(commentsHTML);
+let interventionTemplate = Handlebars.compile(interventionHTML);
 
 
 module.exports = (function(exports) {
@@ -81,6 +83,17 @@ module.exports = (function(exports) {
 					time: study_times.SHORT,
 				},
 				display_next_button: false,
+			},
+			INTERVENTION: {
+				name: "intervention",
+				type: LITW.engine.SLIDE_TYPE.SHOW_SLIDE,
+				template: interventionTemplate,
+				display_element_id: "intervention",
+				display_next_button: true,
+				finish: function(){
+					let intervention = config.intervention_chosen;
+					LITW.data.submitStudyData({ intervention: intervention });
+				}
 			},
 			QUESTIONNAIRE_1: {
 				name: "quest1",
@@ -264,6 +277,14 @@ module.exports = (function(exports) {
 	function configureTimeline() {
 		timeline.push(config.slides.INTRODUCTION);
 		timeline.push(config.slides.INFORMED_CONSENT);
+		const INTERVENTION_IDS = ["UNIQUE", "RESEARCH", "NEUTRAL"];
+		config.intervention_chosen = INTERVENTION_IDS[Math.floor(Math.random() * INTERVENTION_IDS.length)];
+		config.slides.INTERVENTION.template_data = () => {
+			return {
+				message: $.i18n(`litw-study-intervention-message-${config.intervention_chosen}`)
+			};
+		}
+		timeline.push(config.slides.INTERVENTION);
 		config.slides.QUESTIONNAIRE_1.template_data = () => {
 			return getHCLCData('quest1', 8);
 		}
