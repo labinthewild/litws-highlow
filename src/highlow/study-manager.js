@@ -90,10 +90,6 @@ module.exports = (function(exports) {
 				template: interventionTemplate,
 				display_element_id: "intervention",
 				display_next_button: true,
-				finish: function(){
-					let intervention = config.intervention_chosen;
-					LITW.data.submitStudyData({ intervention: intervention });
-				}
 			},
 			QUESTIONNAIRE_1: {
 				name: "quest1",
@@ -281,7 +277,8 @@ module.exports = (function(exports) {
 		config.intervention_chosen = INTERVENTION_IDS[Math.floor(Math.random() * INTERVENTION_IDS.length)];
 		config.slides.INTERVENTION.template_data = () => {
 			return {
-				message: $.i18n(`litw-study-intervention-message-${config.intervention_chosen}`)
+				heading: $.i18n(`litw-study-intervention-${config.intervention_chosen}-heading`),
+				body: $.i18n(`litw-study-intervention-${config.intervention_chosen}-body`)
 			};
 		}
 		timeline.push(config.slides.INTERVENTION);
@@ -465,6 +462,7 @@ module.exports = (function(exports) {
 		let good_config = LITW.engine.configure_study(config.preLoad, config.languages,
 			configureTimeline(), config.study_id);
 		if (good_config){
+			LITW.data.submitStudyConfig({ intervention: config.intervention_chosen });
 			LITW.engine.start_study();
 		} else {
 			console.error("Study configuration error!");
