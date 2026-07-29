@@ -273,15 +273,17 @@ module.exports = (function(exports) {
 	function configureTimeline() {
 		timeline.push(config.slides.INTRODUCTION);
 		timeline.push(config.slides.INFORMED_CONSENT);
-		const INTERVENTION_IDS = ["UNIQUE", "RESEARCH", "NEUTRAL"];
+		const INTERVENTION_IDS = ["NONE", "UNIQUE", "RESEARCH", "NEUTRAL"];
 		config.intervention_chosen = INTERVENTION_IDS[Math.floor(Math.random() * INTERVENTION_IDS.length)];
-		config.slides.INTERVENTION.template_data = () => {
-			return {
-				heading: $.i18n(`litw-study-intervention-${config.intervention_chosen}-heading`),
-				body: $.i18n(`litw-study-intervention-${config.intervention_chosen}-body`)
-			};
-		}
-		timeline.push(config.slides.INTERVENTION);
+    if(config.intervention_chosen !== "NONE") {
+      config.slides.INTERVENTION.template_data = () => {
+        return {
+          heading: $.i18n(`litw-study-intervention-${config.intervention_chosen}-heading`),
+          body: $.i18n(`litw-study-intervention-${config.intervention_chosen}-body`)
+        };
+      }
+      timeline.push(config.slides.INTERVENTION);
+    }
 		config.slides.QUESTIONNAIRE_1.template_data = () => {
 			return getHCLCData('quest1', 8);
 		}
